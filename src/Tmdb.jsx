@@ -3,9 +3,11 @@ const API_BASE = 'https://api.themoviedb.org/3';
 
 const basicFeatch = async (endpoint) => {
     const req = await fetch (`${API_BASE}${endpoint}`);
-    const json = await req.json();
-    return json;
+    const json = await req.json()
+    return json
 }
+
+// Requests API - Retorno JSON Filmes
 
 export default {
     getHomeList: async () => {
@@ -13,7 +15,7 @@ export default {
             {
                 slug: 'originals',
                 title: 'Originais da Netflix',
-                items: await basicFeatch(`/discover/tv?with_network=213&laguange=pt-BR&api_key=${API_KEY}`)
+                items: await basicFeatch(`/discover/tv?with_networks=213&laguange=pt-BR&api_key=${API_KEY}`)
             },
             {
                 slug: 'trending',
@@ -33,7 +35,7 @@ export default {
             {
                 slug: 'comedy',
                 title: 'Comédia',
-                items: await basicFeatch(`/discover/movie?with_genres=35laguange=pt-BR&api_key=${API_KEY}`)
+                items: await basicFeatch(`/discover/movie?with_genres=35?laguange=pt-BR&api_key=${API_KEY}`)
             },
             {
                 slug: 'horror',
@@ -50,7 +52,26 @@ export default {
                 title: 'Documentários',
                 items: await basicFeatch(`/discover/movie?with_genres=99?laguange=pt-BR&api_key=${API_KEY}`)
             },
-
         ];
+    },
+    
+    getMovieInfo: async (movieId, type) => {
+        let info = {};
+
+            if(movieId) {
+                switch(type) {
+                    case 'movie':
+                        info = await basicFeatch(`/movie/${movieId}?language=pt-BR&api_key=${API_KEY}`);
+                    break;
+                    case 'tv':
+                        info = await basicFeatch(`/tv/${movieId}?language=pt-BR&api_key=${API_KEY}`);
+                    break;
+                    default:
+                        info = null;
+                    break;
+                }
+            }
+
+        return info;
     }
 }
